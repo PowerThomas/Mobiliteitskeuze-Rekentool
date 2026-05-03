@@ -5,6 +5,7 @@ import { LocaleProvider, useLocale } from '@/lib/i18n/context';
 import { ThemeProvider, useTheme, type Theme } from '@/lib/theme/context';
 import { WizardShell } from '@/components/wizard/WizardShell';
 import { BreakdownList } from '@/components/BreakdownList';
+import { Hint } from '@/components/Hint';
 import { PercentInput } from '@/components/PercentInput';
 import { ScenarioCard } from '@/components/ScenarioCard';
 import { SensitivitySliders } from '@/components/SensitivitySliders';
@@ -40,6 +41,7 @@ function flattenInputs(inputs: InputState): Record<string, string | number | boo
     leaseListPrice: inputs.lease.listPrice,
     leaseEmployeeContributionPerMonth: inputs.lease.employeeContributionPerMonth,
     leaseAdditionalTaxRate: inputs.lease.additionalTaxRate,
+    leaseAdditionalTaxRateAboveCap: inputs.lease.additionalTaxRateAboveCap,
     leaseAdditionalTaxCap: inputs.lease.additionalTaxCap,
     leaseChargingCovered: inputs.lease.chargingCoveredByEmployer,
     leaseAlsoMobilityBudget: inputs.lease.alsoReceiveMobilityBudget,
@@ -137,13 +139,29 @@ function HomeContent() {
       case 1:
         return (
           <div className="grid gap-3 md:grid-cols-2">
-            <PercentInput
-              label={t.fields.marginalTaxRate}
-              value={inputs.general.marginalTaxRate}
-              onChange={(v) => update('general', { marginalTaxRate: v })}
-              min={0} max={100}
-              hint={t.hints.marginalTaxRate}
-            />
+            <div className="flex flex-col gap-1.5 text-sm">
+              <span className="flex items-center gap-1">
+                <span className="font-medium text-slate-700 dark:text-slate-200">{t.fields.marginalTaxRate}</span>
+                <Hint text={t.hints.marginalTaxRate} />
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {t.fields.taxBrackets.map((bracket) => (
+                  <button
+                    key={bracket.value}
+                    type="button"
+                    onClick={() => update('general', { marginalTaxRate: bracket.value })}
+                    className={`flex flex-col items-start rounded border px-3 py-1.5 text-sm transition-colors ${
+                      inputs.general.marginalTaxRate === bracket.value
+                        ? 'border-blue-600 bg-blue-600 text-white'
+                        : 'border-slate-300 text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    <span>{bracket.label}</span>
+                    <span className="text-xs opacity-70">{bracket.sublabel}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="flex flex-col gap-1.5 text-sm">
               <span className="font-medium text-slate-700 dark:text-slate-200">{t.fields.horizonMonths}</span>
               <div className="flex flex-wrap gap-1.5">
@@ -359,6 +377,13 @@ function HomeContent() {
               onChange={(v) => update('lease', { additionalTaxRate: v })}
               min={0} max={100}
               hint={t.hints.additionalTaxRate}
+            />
+            <PercentInput
+              label={t.fields.additionalTaxRateAboveCap}
+              value={inputs.lease.additionalTaxRateAboveCap}
+              onChange={(v) => update('lease', { additionalTaxRateAboveCap: v })}
+              min={0} max={100}
+              hint={t.hints.additionalTaxRateAboveCap}
             />
             {advancedMode && (
               <NumberInput

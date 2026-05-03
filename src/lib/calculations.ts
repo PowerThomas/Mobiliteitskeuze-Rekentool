@@ -37,7 +37,9 @@ function ereCreditPerMonth(inputs: InputState, homeKwhPerMonth: number): number 
 }
 
 function scenarioA(inputs: InputState): ScenarioResult {
-  const taxableBaseYear = Math.min(inputs.lease.listPrice, inputs.lease.additionalTaxCap) * inputs.lease.additionalTaxRate;
+  const cappedBase = Math.min(inputs.lease.listPrice, inputs.lease.additionalTaxCap) * inputs.lease.additionalTaxRate;
+  const aboveCapBase = Math.max(inputs.lease.listPrice - inputs.lease.additionalTaxCap, 0) * inputs.lease.additionalTaxRateAboveCap;
+  const taxableBaseYear = cappedBase + aboveCapBase;
   const bijtellingTaxPerMonth = monthly(taxableBaseYear * inputs.general.marginalTaxRate);
 
   const energy = energyCostPerMonth(inputs);

@@ -2,7 +2,7 @@ import { InputState } from './types';
 
 export const defaultInputs: InputState = {
   general: {
-    marginalTaxRate: 0.37,
+    marginalTaxRate: 0.3756,
     horizonMonths: 48
   },
   mobility: {
@@ -30,7 +30,8 @@ export const defaultInputs: InputState = {
   lease: {
     listPrice: 42000,
     employeeContributionPerMonth: 125,
-    additionalTaxRate: 0.18,
+    additionalTaxRate: 0.16,
+    additionalTaxRateAboveCap: 0.22,
     additionalTaxCap: 30000,
     chargingCoveredByEmployer: true,
     alsoReceiveMobilityBudget: false

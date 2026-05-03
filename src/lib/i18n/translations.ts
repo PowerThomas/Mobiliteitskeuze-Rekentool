@@ -39,6 +39,7 @@ export type Translations = {
   };
   fields: {
     marginalTaxRate: string;
+    taxBrackets: Array<{ label: string; sublabel: string; value: number }>;
     horizonMonths: string;
     mobilityBudgetAmount: string;
     mobilityBudgetMode: string;
@@ -64,6 +65,7 @@ export type Translations = {
     listPrice: string;
     employeeContribution: string;
     additionalTaxRate: string;
+    additionalTaxRateAboveCap: string;
     additionalTaxCap: string;
     chargingCoveredByEmployer: string;
     alsoReceiveMobilityBudget: string;
@@ -109,6 +111,7 @@ export type Translations = {
     listPrice: string;
     employeeContribution: string;
     additionalTaxRate: string;
+    additionalTaxRateAboveCap: string;
     additionalTaxCap: string;
     chargingCoveredByEmployer: string;
     alsoReceiveMobilityBudget: string;
@@ -151,7 +154,7 @@ export const nl: Translations = {
     netLabel: 'Netto',
     exportCsv: 'Exporteer CSV (inputs + resultaten)',
     mostAffordable: 'Meest voordelig',
-    overHorizon: 'over horizon',
+    overHorizon: 'over looptijd',
     breakdownTitle: 'Breakdown',
     sensitivityTitle: 'Gevoeligheidsanalyse',
     themeLight: 'Licht',
@@ -161,7 +164,7 @@ export const nl: Translations = {
   },
   steps: [
     { title: 'Welkom', subtitle: "Vergelijk drie rijkostenscenario\u2019s naast elkaar op basis van jouw situatie." },
-    { title: 'Persoonlijk & werkgever', subtitle: 'Jouw belastingtarief, vergelijkingshorizon en mobiliteitsbudget.' },
+    { title: 'Persoonlijk & werkgever', subtitle: 'Jouw belastingtarief, looptijd en mobiliteitsbudget.' },
     { title: 'Rijden & laden', subtitle: 'Jaarkilometrages, energieverbruik, laadgedrag en ERE-vergoeding.' },
     { title: 'Scenario A \u2014 Zakelijke lease', subtitle: 'Parameters voor de leaseauto van de zaak (bijtelling, eigen bijdrage).' },
     { title: 'Scenario B \u2014 Eigen EV', subtitle: 'Aanschaf, financiering en vaste maandlasten van een eigen elektrische auto.' },
@@ -186,7 +189,12 @@ export const nl: Translations = {
   },
   fields: {
     marginalTaxRate: 'Marginaal belastingtarief',
-    horizonMonths: 'Vergelijkingshorizon',
+    taxBrackets: [
+      { label: 'Schijf 1 — 35,75%', sublabel: 't/m €38.883', value: 0.3575 },
+      { label: 'Schijf 2 — 37,56%', sublabel: '€38.884 – €78.426', value: 0.3756 },
+      { label: 'Schijf 3 — 49,50%', sublabel: 'boven €78.426', value: 0.495 },
+    ],
+    horizonMonths: 'Looptijd vergelijking',
     mobilityBudgetAmount: 'Mobiliteitsbudget p/m',
     mobilityBudgetMode: 'Budgetmodus',
     budgetModeGross: 'Bruto',
@@ -215,7 +223,8 @@ export const nl: Translations = {
     ereMonthlyFee: 'ERE vaste fee p/m',
     listPrice: 'Cataloguswaarde (incl. BTW)',
     employeeContribution: 'Eigen bijdrage p/m',
-    additionalTaxRate: 'Bijtellingstarief',
+    additionalTaxRate: 'Bijtellingstarief (t/m cap)',
+    additionalTaxRateAboveCap: 'Bijtellingstarief (boven cap)',
     additionalTaxCap: 'Bijtelling cap (\u20ac)',
     chargingCoveredByEmployer: 'Laadkosten door werkgever gedekt',
     alsoReceiveMobilityBudget: 'Toch mobiliteitsbudget ontvangen',
@@ -242,7 +251,8 @@ export const nl: Translations = {
     includesMaintenance: 'Onderhoud inbegrepen',
   },
   hints: {
-    marginalTaxRate: "Loonstrook \u2014 kijk bij 'loonheffing' of 'tarief'. Schijf 1: 35,75%, schijf 2: 37,56%, schijf 3: 49,50% (2026).",
+    marginalTaxRate: 'Het tarief waartegen jouw laatste euro inkomen wordt belast. Kijk op je loonstrook bij \'tarief\' of \'schijf\'. De grenswaarden zijn voor 2026.',
+
     mobilityBudgetAmount: 'Arbeidscontract of werkgeversregeling \u2014 bruto bedrag per maand.',
     mobilityBudgetMode: 'Bruto is v\u00f3\u00f3r loonbelasting. Netto is het bedrag dat je netto ontvangt.',
     taxFreeAllowanceEnabled: 'Belastingdienst \u2014 standaard max \u20ac0,23/km (2026). Staat in HR-beleid of arbeidscontract.',
@@ -260,7 +270,8 @@ export const nl: Translations = {
     ereMonthlyFee: 'Werkgeversafspraken of loonstrook \u2014 vaste administratievergoeding per maand.',
     listPrice: 'Lease-offerte of RDC-catalogus \u2014 nieuwprijs incl. BTW en opties.',
     employeeContribution: 'Lease-contract of salarisstrook \u2014 netto maandbedrag dat je zelf bijdraagt.',
-    additionalTaxRate: 'Belastingdienst \u2014 18% voor volledig elektrisch (2026, capped op \u20ac30.000 cataloguswaarde).',
+    additionalTaxRate: 'Belastingdienst \u2014 16% voor volledig elektrisch (2026) over de eerste \u20ac30.000 cataloguswaarde.',
+    additionalTaxRateAboveCap: 'Belastingdienst \u2014 22% over het deel van de cataloguswaarde boven de cap.',
     additionalTaxCap: 'Belastingdienst Handboek Loonheffingen \u2014 \u20ac30.000 in 2026.',
     chargingCoveredByEmployer: 'Lease-contract of werkgeversregeling \u2014 controleer of laadpas en kosten inbegrepen zijn.',
     alsoReceiveMobilityBudget: 'Werkgeversregeling \u2014 sommige werkgevers bieden naast de leaseauto ook een mobiliteitsbudget.',
@@ -314,7 +325,7 @@ export const nl: Translations = {
     err_downpayment_exceeds_price: 'Mag niet groter zijn dan de aankoopprijs',
     err_residual_100pct: 'Restwaarde mag niet 100% of meer zijn',
     err_residual_exceeds_price: 'Restwaarde mag niet groter zijn dan aankoopprijs',
-    err_financing_exceeds_horizon: 'Langer dan de vergelijkingshorizon',
+    err_financing_exceeds_horizon: 'Langer dan de looptijd van de vergelijking',
   },
 };
 
@@ -333,7 +344,7 @@ export const en: Translations = {
     netLabel: 'Net',
     exportCsv: 'Export CSV (inputs + results)',
     mostAffordable: 'Most affordable',
-    overHorizon: 'over horizon',
+    overHorizon: 'over duration',
     breakdownTitle: 'Breakdown',
     sensitivityTitle: 'Sensitivity analysis',
     themeLight: 'Light',
@@ -343,7 +354,7 @@ export const en: Translations = {
   },
   steps: [
     { title: 'Welcome', subtitle: 'Compare three EV cost scenarios side by side based on your situation.' },
-    { title: 'Personal & employer', subtitle: 'Your tax rate, comparison horizon and mobility budget.' },
+    { title: 'Personal & employer', subtitle: 'Your tax rate, comparison duration and mobility budget.' },
     { title: 'Driving & charging', subtitle: 'Annual mileage, energy consumption, charging habits and ERE allowance.' },
     { title: 'Scenario A \u2014 Company lease', subtitle: 'Parameters for the company lease car (benefit-in-kind, employee contribution).' },
     { title: 'Scenario B \u2014 Own EV', subtitle: 'Purchase, financing and fixed monthly costs of owning an electric car.' },
@@ -368,7 +379,12 @@ export const en: Translations = {
   },
   fields: {
     marginalTaxRate: 'Marginal tax rate',
-    horizonMonths: 'Comparison horizon',
+    taxBrackets: [
+      { label: 'Band 1 — 35.75%', sublabel: 'up to €38,883', value: 0.3575 },
+      { label: 'Band 2 — 37.56%', sublabel: '€38,884 – €78,426', value: 0.3756 },
+      { label: 'Band 3 — 49.50%', sublabel: 'above €78,426', value: 0.495 },
+    ],
+    horizonMonths: 'Comparison duration',
     mobilityBudgetAmount: 'Mobility budget p/m',
     mobilityBudgetMode: 'Budget mode',
     budgetModeGross: 'Gross',
@@ -397,7 +413,8 @@ export const en: Translations = {
     ereMonthlyFee: 'ERE fixed fee p/m',
     listPrice: 'List price (incl. VAT)',
     employeeContribution: 'Employee contribution p/m',
-    additionalTaxRate: 'Benefit-in-kind rate',
+    additionalTaxRate: 'Benefit-in-kind rate (up to cap)',
+    additionalTaxRateAboveCap: 'Benefit-in-kind rate (above cap)',
     additionalTaxCap: 'Benefit-in-kind cap (\u20ac)',
     chargingCoveredByEmployer: 'Charging covered by employer',
     alsoReceiveMobilityBudget: 'Also receive mobility budget',
@@ -424,7 +441,7 @@ export const en: Translations = {
     includesMaintenance: 'Maintenance included',
   },
   hints: {
-    marginalTaxRate: "Payslip \u2014 look for 'tax rate' or 'bracket'. Band 1: 35.75%, Band 2: 37.56%, Band 3: 49.50% (2026).",
+    marginalTaxRate: "The rate at which your last euro of income is taxed. Check your payslip for 'tax rate' or 'bracket'. Thresholds are for 2026.",
     mobilityBudgetAmount: 'Employment contract or employer policy \u2014 gross amount per month.',
     mobilityBudgetMode: 'Gross is before income tax. Net is the take-home amount.',
     taxFreeAllowanceEnabled: 'Tax authority \u2014 standard max \u20ac0.23/km (2026). Check your HR policy or employment contract.',
@@ -442,7 +459,8 @@ export const en: Translations = {
     ereMonthlyFee: 'Employer agreement or payslip \u2014 fixed admin fee per month.',
     listPrice: 'Lease quote or RDC catalogue \u2014 new price incl. VAT and options.',
     employeeContribution: 'Lease contract or payslip \u2014 net monthly amount you personally contribute.',
-    additionalTaxRate: 'Tax authority \u2014 18% for full EV (2026, capped at \u20ac30,000 list price).',
+    additionalTaxRate: 'Tax authority \u2014 16% for full EV (2026) on the first \u20ac30,000 of list price.',
+    additionalTaxRateAboveCap: 'Tax authority \u2014 22% on the portion of list price above the cap.',
     additionalTaxCap: 'Tax authority Payroll Tax Handbook \u2014 \u20ac30,000 in 2026.',
     chargingCoveredByEmployer: 'Lease contract or employer policy \u2014 check whether charge card and costs are included.',
     alsoReceiveMobilityBudget: 'Employer policy \u2014 some employers offer a mobility budget alongside the company car.',
@@ -457,7 +475,7 @@ export const en: Translations = {
     mrbPerMonth: 'Tax authority road tax calculator \u2014 electric cars pay quarter rate (25%) in 2026.',
     maintenancePerMonth: 'Dealer maintenance package or estimate \u2014 EVs average \u20ac60\u2013100/month.',
     chargingStationCost: 'Home charger installation quote \u2014 incl. installation typically \u20ac800\u20131,500.',
-    chargingStationDepMonths: 'Use the comparison horizon as a guide, or the expected useful life.',
+    chargingStationDepMonths: 'Use the comparison duration as a guide, or the expected useful life.',
     privateLeaseCost: 'Private lease quote \u2014 all-in monthly amount. Check what is and isn\u2019t included.',
     includedKmPerYear: 'Private lease contract \u2014 km per year with no surcharge.',
     extraKmPrice: 'Private lease contract \u2014 rate per extra km above the included amount.',
@@ -496,7 +514,7 @@ export const en: Translations = {
     err_downpayment_exceeds_price: 'Must be less than the purchase price',
     err_residual_100pct: 'Residual value cannot be 100% or more',
     err_residual_exceeds_price: 'Residual value cannot exceed purchase price',
-    err_financing_exceeds_horizon: 'Longer than the comparison horizon',
+    err_financing_exceeds_horizon: 'Longer than the comparison duration',
   },
 };
 

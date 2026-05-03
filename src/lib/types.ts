@@ -31,6 +31,7 @@ export interface InputState {
     listPrice: number;
     employeeContributionPerMonth: number;
     additionalTaxRate: number;
+    additionalTaxRateAboveCap: number;
     additionalTaxCap: number;
     chargingCoveredByEmployer: boolean;
     alsoReceiveMobilityBudget: boolean;
