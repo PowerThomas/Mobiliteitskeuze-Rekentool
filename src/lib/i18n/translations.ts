@@ -25,7 +25,7 @@ export type Translations = {
     themeSystem: string;
     livePreview: string;
   };
-  steps: Array<{ title: string; subtitle: string }>;
+  steps: Array<{ title: string; navLabel?: string; subtitle: string }>;
   welcome: {
     intro: string;
     scenarios: [
@@ -164,12 +164,12 @@ export const nl: Translations = {
   },
   steps: [
     { title: 'Welkom', subtitle: "Vergelijk drie rijkostenscenario\u2019s naast elkaar op basis van jouw situatie." },
-    { title: 'Persoonlijk & werkgever', subtitle: 'Jouw belastingtarief, looptijd en mobiliteitsbudget.' },
-    { title: 'Rijden & laden', subtitle: 'Jaarkilometrages, energieverbruik, laadgedrag en ERE-vergoeding.' },
-    { title: 'Scenario A \u2014 Zakelijke lease', subtitle: 'Parameters voor de leaseauto van de zaak (bijtelling, eigen bijdrage).' },
-    { title: 'Scenario B \u2014 Eigen EV', subtitle: 'Aanschaf, financiering en vaste maandlasten van een eigen elektrische auto.' },
-    { title: 'Scenario C \u2014 Private lease', subtitle: 'Maandkosten, inbegrepen kilometers en meegeleverde posten van een priv\u00e9leasecontract.' },
-    { title: 'Vergelijking & resultaten', subtitle: 'Jouw volledige kostenplaatje per scenario \u2014 netto maandimpact.' },
+    { title: 'Persoonlijk & werkgever', navLabel: 'Persoonlijk', subtitle: 'Jouw belastingtarief, looptijd en mobiliteitsbudget.' },
+    { title: 'Rijden & laden', navLabel: 'Rijden', subtitle: 'Jaarkilometrages, energieverbruik, laadgedrag en ERE-vergoeding.' },
+    { title: 'Scenario A \u2014 Zakelijke lease', navLabel: 'A: Zakelijk', subtitle: 'Parameters voor de leaseauto van de zaak (bijtelling, eigen bijdrage).' },
+    { title: 'Scenario B \u2014 Eigen EV', navLabel: 'B: Eigen EV', subtitle: 'Aanschaf, financiering en vaste maandlasten van een eigen elektrische auto.' },
+    { title: 'Scenario C \u2014 Private lease', navLabel: 'C: Privélease', subtitle: 'Maandkosten, inbegrepen kilometers en meegeleverde posten van een priv\u00e9leasecontract.' },
+    { title: 'Vergelijking & resultaten', navLabel: 'Resultaten', subtitle: 'Jouw volledige kostenplaatje per scenario \u2014 netto maandimpact.' },
   ],
   welcome: {
     intro: "Deze rekentool vergelijkt drie scenario\u2019s voor elektrisch rijden naast elkaar:",
@@ -354,12 +354,12 @@ export const en: Translations = {
   },
   steps: [
     { title: 'Welcome', subtitle: 'Compare three EV cost scenarios side by side based on your situation.' },
-    { title: 'Personal & employer', subtitle: 'Your tax rate, comparison duration and mobility budget.' },
-    { title: 'Driving & charging', subtitle: 'Annual mileage, energy consumption, charging habits and ERE allowance.' },
-    { title: 'Scenario A \u2014 Company lease', subtitle: 'Parameters for the company lease car (benefit-in-kind, employee contribution).' },
-    { title: 'Scenario B \u2014 Own EV', subtitle: 'Purchase, financing and fixed monthly costs of owning an electric car.' },
-    { title: 'Scenario C \u2014 Private lease', subtitle: 'Monthly cost, included mileage and included items of a private lease contract.' },
-    { title: 'Comparison & results', subtitle: 'Your full cost breakdown per scenario \u2014 net monthly impact.' },
+    { title: 'Personal & employer', navLabel: 'Personal', subtitle: 'Your tax rate, comparison duration and mobility budget.' },
+    { title: 'Driving & charging', navLabel: 'Driving', subtitle: 'Annual mileage, energy consumption, charging habits and ERE allowance.' },
+    { title: 'Scenario A \u2014 Company lease', navLabel: 'A: Company', subtitle: 'Parameters for the company lease car (benefit-in-kind, employee contribution).' },
+    { title: 'Scenario B \u2014 Own EV', navLabel: 'B: Own EV', subtitle: 'Purchase, financing and fixed monthly costs of owning an electric car.' },
+    { title: 'Scenario C \u2014 Private lease', navLabel: 'C: Private', subtitle: 'Monthly cost, included mileage and included items of a private lease contract.' },
+    { title: 'Comparison & results', navLabel: 'Results', subtitle: 'Your full cost breakdown per scenario \u2014 net monthly impact.' },
   ],
   welcome: {
     intro: 'This calculator compares three electric driving scenarios side by side:',

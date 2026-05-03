@@ -651,6 +651,7 @@ function HomeContent() {
           activeStep={step}
           onNext={() => setStep((s) => Math.min(s + 1, t.steps.length - 1))}
           onPrev={() => setStep((s) => Math.max(s - 1, 0))}
+          onGoTo={(s) => setStep(s)}
           headerActions={(
             <div className="flex overflow-hidden rounded-lg border border-slate-200 text-sm dark:border-slate-700">
               <button

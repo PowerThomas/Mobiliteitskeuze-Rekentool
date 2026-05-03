@@ -5,6 +5,7 @@ import { useLocale } from '@/lib/i18n/context';
 
 export interface WizardStepMeta {
   title: string;
+  navLabel?: string;
   subtitle?: string;
 }
 
@@ -13,34 +14,69 @@ interface WizardShellProps {
   activeStep: number;
   onNext: () => void;
   onPrev: () => void;
+  onGoTo: (step: number) => void;
   headerActions?: React.ReactNode;
   children: React.ReactNode;
 }
 
-export function WizardShell({ steps, activeStep, onNext, onPrev, headerActions, children }: WizardShellProps) {
+export function WizardShell({ steps, activeStep, onNext, onPrev, onGoTo, headerActions, children }: WizardShellProps) {
   const { t } = useLocale();
   const isFirst = activeStep === 0;
   const isLast = activeStep === steps.length - 1;
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Progress bar */}
-      <div className="flex items-center gap-1" role="progressbar" aria-valuenow={activeStep + 1} aria-valuemin={1} aria-valuemax={steps.length}>
-        {steps.map((_, idx) => (
-          <div
-            key={idx}
-            className={`h-1.5 flex-1 rounded-full transition-colors duration-200 ${idx <= activeStep ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
-          />
-        ))}
-      </div>
+      {/* Clickable step indicators */}
+      <nav aria-label="Wizard stappen" className="flex items-start">
+        {steps.map((s, idx) => {
+          const done = idx < activeStep;
+          const active = idx === activeStep;
+          return (
+            <React.Fragment key={idx}>
+              <button
+                type="button"
+                onClick={() => onGoTo(idx)}
+                aria-current={active ? 'step' : undefined}
+                title={s.title}
+                className={`group flex flex-col items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-sm ${
+                  active ? 'cursor-default' : 'cursor-pointer'
+                }`}
+              >
+                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold transition-colors ${
+                  active
+                    ? 'border-blue-600 bg-blue-600 text-white'
+                    : done
+                    ? 'border-blue-600 bg-blue-600 text-white group-hover:bg-blue-700 group-hover:border-blue-700'
+                    : 'border-slate-300 bg-white text-slate-400 group-hover:border-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-500'
+                }`}>
+                  {done ? (
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    idx + 1
+                  )}
+                </div>
+                <span className={`w-14 truncate text-center text-[0.6rem] leading-tight transition-colors ${
+                  active ? 'font-semibold text-blue-600 dark:text-blue-400' :
+                  done ? 'text-slate-500 dark:text-slate-400' :
+                  'text-slate-400 dark:text-slate-500'
+                }`}>
+                  {s.navLabel ?? s.title}
+                </span>
+              </button>
+              {idx < steps.length - 1 && (
+                <div className={`mt-3.5 h-0.5 flex-1 shrink transition-colors ${idx < activeStep ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`} />
+              )}
+            </React.Fragment>
+          );
+        })}
+      </nav>
 
       {/* Step header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-            {t.ui.stepOf(activeStep + 1, steps.length)}
-          </p>
-          <h2 className="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-50">{steps[activeStep].title}</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">{steps[activeStep].title}</h2>
           {steps[activeStep].subtitle && (
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{steps[activeStep].subtitle}</p>
           )}
