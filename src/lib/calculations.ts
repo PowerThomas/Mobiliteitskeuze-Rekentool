@@ -45,14 +45,14 @@ function scenarioA(inputs: InputState): ScenarioResult {
   const mobilityBudgetCredit = inputs.lease.alsoReceiveMobilityBudget ? mobilityBudgetNetPerMonth(inputs) : 0;
 
   const breakdown = [
-    { label: 'Bijtelling: extra belasting', amountPerMonth: bijtellingTaxPerMonth },
-    { label: 'Eigen bijdrage lease', amountPerMonth: inputs.lease.employeeContributionPerMonth },
-    { label: 'Laadkosten (indien niet gedekt)', amountPerMonth: chargingCost },
-    { label: 'Mobiliteitsbudget (optioneel)', amountPerMonth: -mobilityBudgetCredit }
+    { label: 'bijtelling_tax', amountPerMonth: bijtellingTaxPerMonth },
+    { label: 'employee_contribution', amountPerMonth: inputs.lease.employeeContributionPerMonth },
+    { label: 'charging_cost_lease', amountPerMonth: chargingCost },
+    { label: 'mobility_budget_optional', amountPerMonth: -mobilityBudgetCredit }
   ];
 
   const netPerMonth = breakdown.reduce((sum, x) => sum + x.amountPerMonth, 0);
-  return { key: 'A', title: 'A · Zakelijke lease EV', netPerMonth, totalHorizon: netPerMonth * inputs.general.horizonMonths, breakdown };
+  return { key: 'A', title: 'A', netPerMonth, totalHorizon: netPerMonth * inputs.general.horizonMonths, breakdown };
 }
 
 function scenarioB(inputs: InputState): ScenarioResult {
@@ -73,20 +73,20 @@ function scenarioB(inputs: InputState): ScenarioResult {
   const stationDepPerMonth = inputs.ownEv.chargingStationCost / Math.max(inputs.ownEv.chargingStationDepreciationMonths, 1);
 
   const breakdown = [
-    { label: 'Afschrijving auto', amountPerMonth: depreciationPerMonth },
-    { label: 'Financiering (rente+aflossing)', amountPerMonth: financeMonthly },
-    { label: 'Verzekering', amountPerMonth: inputs.ownEv.insurancePerMonth },
-    { label: 'MRB', amountPerMonth: inputs.ownEv.mrbPerMonth },
-    { label: 'Onderhoud', amountPerMonth: inputs.ownEv.maintenancePerMonth },
-    { label: 'Laadkosten thuis/publiek', amountPerMonth: energy.total },
-    { label: 'Thuislaadpaal afschrijving', amountPerMonth: stationDepPerMonth },
-    { label: 'ERE-credit (incl fee)', amountPerMonth: -ereCredit },
-    { label: 'Mobiliteitsbudget netto', amountPerMonth: -mobilityBudgetNetPerMonth(inputs) },
-    { label: 'Onbelaste km-vergoeding', amountPerMonth: -taxFreeKmCreditPerMonth(inputs) }
+    { label: 'depreciation', amountPerMonth: depreciationPerMonth },
+    { label: 'financing', amountPerMonth: financeMonthly },
+    { label: 'insurance', amountPerMonth: inputs.ownEv.insurancePerMonth },
+    { label: 'mrb', amountPerMonth: inputs.ownEv.mrbPerMonth },
+    { label: 'maintenance', amountPerMonth: inputs.ownEv.maintenancePerMonth },
+    { label: 'charging_cost', amountPerMonth: energy.total },
+    { label: 'station_depreciation', amountPerMonth: stationDepPerMonth },
+    { label: 'ere_credit', amountPerMonth: -ereCredit },
+    { label: 'mobility_budget_net', amountPerMonth: -mobilityBudgetNetPerMonth(inputs) },
+    { label: 'km_allowance', amountPerMonth: -taxFreeKmCreditPerMonth(inputs) }
   ];
 
   const netPerMonth = breakdown.reduce((sum, x) => sum + x.amountPerMonth, 0);
-  return { key: 'B', title: 'B · Mobiliteitsbudget + eigen EV', netPerMonth, totalHorizon: netPerMonth * inputs.general.horizonMonths, breakdown };
+  return { key: 'B', title: 'B', netPerMonth, totalHorizon: netPerMonth * inputs.general.horizonMonths, breakdown };
 }
 
 function scenarioC(inputs: InputState): ScenarioResult {
@@ -100,19 +100,19 @@ function scenarioC(inputs: InputState): ScenarioResult {
   const fallbackMaintenance = inputs.privateLease.includesMaintenance ? 0 : inputs.ownEv.maintenancePerMonth;
 
   const breakdown = [
-    { label: 'Private lease maandbedrag', amountPerMonth: inputs.privateLease.monthlyLeaseCost },
-    { label: 'Meer-km kosten', amountPerMonth: extraKmCostPerMonth },
-    { label: 'Verzekering (niet inbegrepen)', amountPerMonth: fallbackInsurance },
-    { label: 'MRB (niet inbegrepen)', amountPerMonth: fallbackMrb },
-    { label: 'Onderhoud (niet inbegrepen)', amountPerMonth: fallbackMaintenance },
-    { label: 'Laadkosten thuis/publiek', amountPerMonth: energy.total },
-    { label: 'ERE-credit (incl fee)', amountPerMonth: -ereCredit },
-    { label: 'Mobiliteitsbudget netto', amountPerMonth: -mobilityBudgetNetPerMonth(inputs) },
-    { label: 'Onbelaste km-vergoeding', amountPerMonth: -taxFreeKmCreditPerMonth(inputs) }
+    { label: 'lease_monthly', amountPerMonth: inputs.privateLease.monthlyLeaseCost },
+    { label: 'extra_km_cost', amountPerMonth: extraKmCostPerMonth },
+    { label: 'insurance_not_included', amountPerMonth: fallbackInsurance },
+    { label: 'mrb_not_included', amountPerMonth: fallbackMrb },
+    { label: 'maintenance_not_included', amountPerMonth: fallbackMaintenance },
+    { label: 'charging_cost', amountPerMonth: energy.total },
+    { label: 'ere_credit', amountPerMonth: -ereCredit },
+    { label: 'mobility_budget_net', amountPerMonth: -mobilityBudgetNetPerMonth(inputs) },
+    { label: 'km_allowance', amountPerMonth: -taxFreeKmCreditPerMonth(inputs) }
   ];
 
   const netPerMonth = breakdown.reduce((sum, x) => sum + x.amountPerMonth, 0);
-  return { key: 'C', title: 'C · Mobiliteitsbudget + private lease EV', netPerMonth, totalHorizon: netPerMonth * inputs.general.horizonMonths, breakdown };
+  return { key: 'C', title: 'C', netPerMonth, totalHorizon: netPerMonth * inputs.general.horizonMonths, breakdown };
 }
 
 export function calculateComparison(inputs: InputState): ComparisonResult {

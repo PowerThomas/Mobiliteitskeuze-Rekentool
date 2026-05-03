@@ -30,7 +30,7 @@ export const defaultInputs: InputState = {
   lease: {
     listPrice: 42000,
     employeeContributionPerMonth: 125,
-    additionalTaxRate: 0.17,
+    additionalTaxRate: 0.18,
     additionalTaxCap: 30000,
     chargingCoveredByEmployer: true,
     alsoReceiveMobilityBudget: false
